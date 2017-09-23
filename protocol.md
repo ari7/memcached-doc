@@ -609,9 +609,8 @@ In the type column below, "32u" means a 32-bit unsigned integer, "64u"
 means a 64-bit unsigned integer. '32u.32u' means two 32-bit unsigned
 integers separated by a colon (treat this as a floating point number).
 
-|-----------------------+---------+-------------------------------------------|
 | Name                  | Type    | Meaning                                   |
-|-----------------------+---------+-------------------------------------------|
+|-----------------------|---------|-------------------------------------------|
 | pid                   | 32u     | Process id of this server process         |
 | uptime                | 32u     | Number of secs since the server started   |
 | time                  | 32u     | current UNIX time according to the server |
@@ -734,7 +733,6 @@ integers separated by a colon (treat this as a floating point number).
 | log_worker_written    | 64u     | Logs written by a worker, to be picked up |
 | log_watcher_skipped   | 64u     | Logs not sent to slow watchers.           |
 | log_watcher_sent      | 64u     | Logs written to watchers.                 |
-|-----------------------+---------+-------------------------------------------|
 
 Settings statistics
 -------------------
@@ -749,9 +747,8 @@ Note that these are not guaranteed to return in any specific order and
 this list may not be exhaustive.  Otherwise, this returns like any
 other stats command.
 
-|-------------------+----------+----------------------------------------------|
 | Name              | Type     | Meaning                                      |
-|-------------------+----------+----------------------------------------------|
+|-------------------|----------|----------------------------------------------|
 | maxbytes          | size_t   | Maximum number of bytes allowed in the cache |
 | maxconns          | 32       | Maximum number of clients allowed.           |
 | tcpport           | 32       | TCP listen port.                             |
@@ -807,7 +804,6 @@ other stats command.
 |                   | bool     | If yes, stores numbers from VALUE response   |
 |                   |          | inside an item, using up to 24 bytes.        |
 |                   |          | Small slowdown for ASCII get, faster sets.   |
-|-------------------+----------+----------------------------------------------|
 
 
 Item statistics
@@ -956,9 +952,8 @@ The server terminates this list with the line
 
 END\r\n
 
-|-----------------+----------------------------------------------------------|
 | Name            | Meaning                                                  |
-|-----------------+----------------------------------------------------------|
+|-----------------|----------------------------------------------------------|
 | chunk_size      | The amount of space each chunk uses. One item will use   |
 |                 | one chunk of the appropriate size.                       |
 | chunks_per_page | How many chunks exist within one page. A page by         |
@@ -982,7 +977,6 @@ END\r\n
 | mem_requested   | Number of bytes requested to be stored in this slab[*].  |
 | active_slabs    | Total number of slab classes allocated.                  |
 | total_malloced  | Total amount of memory allocated to slab pages.          |
-|-----------------+----------------------------------------------------------|
 
 * Items are stored in a slab that is the same size or larger than the
   item.  mem_requested shows the size of all items within a
@@ -1005,9 +999,8 @@ END\r\n
 
 The following "stat" keywords may be present:
 
-|---------------------+------------------------------------------------------|
 | Name                | Meaning                                              |
-|---------------------+------------------------------------------------------|
+|---------------------|------------------------------------------------------|
 | addr                | The address of the remote side. For listening        |
 |                     | sockets this is the listen address. Note that some   |
 |                     | socket types (such as UNIX-domain) don't have        |
@@ -1019,13 +1012,11 @@ The following "stat" keywords may be present:
 |                     | "state" indicates a command is currently executing,  |
 |                     | this will be the number of seconds the current       |
 |                     | command has been running.                            |
-|---------------------+------------------------------------------------------|
 
 The value of the "state" stat may be one of the following:
 
-|----------------+-----------------------------------------------------------|
 | Name           | Meaning                                                   |
-|----------------+-----------------------------------------------------------|
+|----------------|-----------------------------------------------------------|
 | conn_closing   | Shutting down the connection.                             |
 | conn_listening | Listening for new connections or a new UDP request.       |
 | conn_mwrite    | Writing a complex response, e.g., to a "get" command.     |
@@ -1042,7 +1033,6 @@ The value of the "state" stat may be one of the following:
 |                | between this and conn_nread).                             |
 | conn_write     | Writing a simple response (anything that doesn't involve  |
 |                | sending back multiple lines of response data).            |
-|----------------+-----------------------------------------------------------|
 
 
 
