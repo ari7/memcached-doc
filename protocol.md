@@ -126,8 +126,8 @@ Storage commands
 
 First, the client sends a command line which looks like this:
 
-<command name> <key> <flags> <exptime> <bytes> [noreply]\r\n
-cas <key> <flags> <exptime> <bytes> <cas unique> [noreply]\r\n
+    <command name> <key> <flags> <exptime> <bytes> [noreply]\r\n
+    cas <key> <flags> <exptime> <bytes> <cas unique> [noreply]\r\n
 
 - <command name> is "set", "add", "replace", "append" or "prepend"
 
@@ -184,7 +184,7 @@ cas <key> <flags> <exptime> <bytes> <cas unique> [noreply]\r\n
 
 After this line, the client sends the data block:
 
-<data block>\r\n
+    <data block>\r\n
 
 - <data block> is a chunk of arbitrary 8-bit data of length <bytes>
   from the previous line.
@@ -210,8 +210,8 @@ Retrieval command:
 
 The retrieval commands "get" and "gets" operate like this:
 
-get <key>*\r\n
-gets <key>*\r\n
+    get <key>*\r\n
+    gets <key>*\r\n
 
 - <key>* means one or more key strings separated by whitespace.
 
@@ -219,14 +219,14 @@ After this command, the client expects zero or more items, each of
 which is received as a text line followed by a data block. After all
 the items have been transmitted, the server sends the string
 
-"END\r\n"
+    "END\r\n"
 
 to indicate the end of response.
 
 Each item sent by the server looks like this:
 
-VALUE <key> <flags> <bytes> [<cas unique>]\r\n
-<data block>\r\n
+    VALUE <key> <flags> <bytes> [<cas unique>]\r\n
+    <data block>\r\n
 
 - <key> is the key for the item being sent
 
@@ -252,7 +252,7 @@ Deletion
 
 The command "delete" allows for explicit deletion of items:
 
-delete <key> [noreply]\r\n
+    delete <key> [noreply]\r\n
 
 - <key> is the key of the item the client wishes the server to delete
 
@@ -285,11 +285,11 @@ that a non-existent key exists with value 0; instead, they will fail.
 
 The client sends the command line:
 
-incr <key> <value> [noreply]\r\n
+    incr <key> <value> [noreply]\r\n
 
 or
 
-decr <key> <value> [noreply]\r\n
+    decr <key> <value> [noreply]\r\n
 
 - <key> is the key of the item the client wishes to change
 
@@ -322,7 +322,7 @@ Touch
 The "touch" command is used to update the expiration time of an existing item
 without fetching it.
 
-touch <key> <exptime> [noreply]\r\n
+    touch <key> <exptime> [noreply]\r\n
 
 - <key> is the key of the item the client wishes the server to touch
 
@@ -388,7 +388,7 @@ more details.
 
 The automover can be enabled or disabled at runtime with this command.
 
-slabs automove <0|1>
+    slabs automove <0|1>
 
 - 0|1|2 is the indicator on whether to enable the slabs automover or not.
 
@@ -415,7 +415,7 @@ The traditional model is "flat" mode, which is a single LRU chain per slab
 class. The newer (with `-o modern` or `-o lru_maintainer`) is segmented into
 HOT, WARM, COLD. There is also a TEMP LRU. See doc/new_lru.txt for details.
 
-lru <tune|mode|temp_ttl> <option list>
+    lru <tune|mode|temp_ttl> <option list>
 
 - "tune" takes numeric arguments "percent hot", "percent warm",
   "max hot factor", "max warm age factor". IE: "lru tune 10 25 0.1 2.0".
@@ -451,7 +451,7 @@ items. This is useful if you have a mix of items with both long and short
 TTL's, but aren't accessed very often. This system is not required for normal
 usage, and can add small amounts of latency and increase CPU usage.
 
-lru_crawler <enable|disable>
+    lru_crawler <enable|disable>
 
 - Enable or disable the LRU Crawler background thread.
 
@@ -461,7 +461,9 @@ The response line could be one of:
 
 - "ERROR [message]" something went wrong while enabling or disabling.
 
+```
 lru_crawler sleep <microseconds>
+```
 
 - The number of microseconds to sleep in between each item checked for
   expiration. Smaller numbers will obviously impact the system more.
@@ -533,7 +535,7 @@ Watchers are a way to connect to memcached and inspect what's going on
 internally. This is an evolving feature so new endpoints should show up over
 time.
 
-watch <fetchers|mutations|evictions>
+    watch <fetchers|mutations|evictions>
 
 - Turn connection into a watcher. Options can be stacked and are
   space-separated. Logs will be sent to the watcher until it disconnects.
@@ -575,12 +577,12 @@ The command "stats" is used to query the server about statistics it
 maintains and other internal data. It has two forms. Without
 arguments:
 
-stats\r\n
+    stats\r\n
 
 it causes the server to output general-purpose statistics and
 settings, documented below.  In the other form it has some arguments:
 
-stats <args>\r\n
+    stats <args>\r\n
 
 Depending on <args>, various internal data is sent by the server. The
 kinds of arguments and the data sent are not documented in this version
@@ -594,11 +596,11 @@ General-purpose statistics
 Upon receiving the "stats" command without arguments, the server sents
 a number of lines which look like this:
 
-STAT <name> <value>\r\n
+    STAT <name> <value>\r\n
 
 The server terminates this list with the line
 
-END\r\n
+    END\r\n
 
 In each line of statistics, <name> is the name of this statistic, and
 <value> is the data.  The following is the list of all names sent in
@@ -814,11 +816,11 @@ future.
 The "stats" command with the argument of "items" returns information about
 item storage per slab class. The data is returned in the format:
 
-STAT items:<slabclass>:<stat> <value>\r\n
+    STAT items:<slabclass>:<stat> <value>\r\n
 
 The server terminates this list with the line
 
-END\r\n
+    END\r\n
 
 The slabclass aligns with class ids used by the "stats slabs" command. Where
 "stats slabs" describes size and memory usage, "stats items" shows higher
@@ -890,11 +892,11 @@ lock while it iterates the items. 1.4.27 and greater are safe.
 
 The data is returned in the following format:
 
-STAT <size> <count>\r\n
+    STAT <size> <count>\r\n
 
 The server terminates this list with the line
 
-END\r\n
+    END\r\n
 
 'size' is an approximate size of the item, within 32 bytes.
 'count' is the amount of items that exist within that 32-byte range.
@@ -918,20 +920,20 @@ It can also be enabled at starttime with "-o track_sizes"
 
 If disabled, "stats sizes" will return:
 
-STAT sizes_status disabled\r\n
+    STAT sizes_status disabled\r\n
 
 "stats sizes_enable" will return:
 
-STAT sizes_status enabled\r\n
+    STAT sizes_status enabled\r\n
 
 "stats sizes_disable" will return:
 
-STAT sizes_status disabled\r\n
+    STAT sizes_status disabled\r\n
 
 If an error happens, it will return:
 
-STAT sizes_status error\r\n
-STAT sizes_error [error_message]\r\n
+    STAT sizes_status error\r\n
+    STAT sizes_error [error_message]\r\n
 
 CAVEAT: If CAS support is disabled, you cannot enable/disable this feature at
 runtime.
@@ -945,12 +947,12 @@ The "stats" command with the argument of "slabs" returns information about
 each of the slabs created by memcached during runtime. This includes per-slab
 information along with some totals. The data is returned in the format:
 
-STAT <slabclass>:<stat> <value>\r\n
-STAT <stat> <value>\r\n
+    STAT <slabclass>:<stat> <value>\r\n
+    STAT <stat> <value>\r\n
 
 The server terminates this list with the line
 
-END\r\n
+    END\r\n
 
 | Name            | Meaning                                                  |
 |-----------------|----------------------------------------------------------|
@@ -991,11 +993,11 @@ The "stats" command with the argument of "conns" returns information
 about currently active connections and about sockets that are listening
 for new connections. The data is returned in the format:
 
-STAT <file descriptor>:<stat> <value>\r\n
+    STAT <file descriptor>:<stat> <value>\r\n
 
 The server terminates this list with the line
 
-END\r\n
+    END\r\n
 
 The following "stat" keywords may be present:
 
@@ -1075,7 +1077,7 @@ megabytes internally.
 
 "version" is a command with no arguments:
 
-version\r\n
+    version\r\n
 
 In response, the server sends
 
@@ -1089,7 +1091,7 @@ the logging output.
 
 "quit" is a command with no arguments:
 
-quit\r\n
+    quit\r\n
 
 Upon receiving this command, the server closes the
 connection. However, the client may also simply close the connection
@@ -1103,7 +1105,7 @@ security restrictions:
 
 "misbehave" is a command with no arguments:
 
-misbehave\r\n
+    misbehave\r\n
 
 This command causes the worker thread to attempt a) opening a new socket, and
 b) executing a shell command. If either one is successful, an error is
@@ -1132,10 +1134,10 @@ reasons anyway.)
 The frame header is 8 bytes long, as follows (all values are 16-bit integers
 in network byte order, high byte first):
 
-0-1 Request ID
-2-3 Sequence number
-4-5 Total number of datagrams in this message
-6-7 Reserved for future use; must be 0
+    0-1 Request ID
+    2-3 Sequence number
+    4-5 Total number of datagrams in this message
+    6-7 Reserved for future use; must be 0
 
 The request ID is supplied by the client. Typically it will be a
 monotonically increasing value starting from a random seed, but the client
